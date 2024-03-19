@@ -119,7 +119,12 @@ def test2(size=13, c1=1, c2=0):
             print("Brak miejsca")
     print(tab)
 
-test1()
-test2()
-test2(c1=0, c2=1)
-test1(c1=0, c2=1)
+def main():
+    test1()
+    test2()
+    test2(c1=0, c2=1)
+    test1(c1=0, c2=1)
+
+
+if __name__ == "__main__":
+    main()
