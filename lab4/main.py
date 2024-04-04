@@ -60,7 +60,7 @@ class HashTable:
         for i in self.__tab:
             tabstr += f"{i}, "
         tabstr = tabstr[:-2]
-        return "["+tabstr+"]"
+        return "{"+tabstr+"}"
 
     
 class Element:
