@@ -35,6 +35,26 @@ def shell_sort(tab):
                         break
         h = h//2
 
+def shell_sort2(tab):
+    h = None
+    k = 1
+    while True:
+        val = (3**k-1)//2
+        if val < len(tab)/3:
+            h = val
+        else:
+            break
+        k += 1
+    while h >= 1:
+        for offset in range(0, h):
+            for i in range(1+offset, len(tab), h):
+                for j in range(i-h, -1, -h):
+                    if tab[j] > tab[j+h]:
+                        tab[j], tab[j+h] = tab[j+h], tab[j]
+                    else:
+                        break
+        h = h//3
+
 
 def main():
     data = [(5,'A'), (5,'B'), (7,'C'), (2,'D'), (5,'E'), (1,'F'), (7,'G'), (5,'H'), (1,'I'), (2,'J')]
@@ -42,6 +62,7 @@ def main():
     elem_list_shell = elem_list.copy()
     random_num = [int(random.random() * 100) for _ in range(10000)]
     random_num_shell = random_num.copy()
+    random_num_shell2 = random_num.copy()
     insert_sort(elem_list)
 
     print(elem_list)
@@ -61,6 +82,11 @@ def main():
 
     t_start = time.perf_counter()
     shell_sort(random_num_shell)
+    t_stop = time.perf_counter()
+    print("Czas obliczeń:", "{:.7f}".format(t_stop - t_start))
+
+    t_start = time.perf_counter()
+    shell_sort2(random_num_shell2)
     t_stop = time.perf_counter()
     print("Czas obliczeń:", "{:.7f}".format(t_stop - t_start))
 
