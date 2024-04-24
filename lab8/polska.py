@@ -63,11 +63,11 @@ def draw_map(edges=graf, col=None):
     wn.setup(width=500,height=470, startx=10, starty=10)
     wn.title("Polska")
     
-    wn.addshape("polska.gif") 
+    wn.addshape("/home/artur/studia/algorithms-and-data-structures/lab8/polska.gif") 
     
     myImage = turtle.Turtle()
     myImage.speed(0) 
-    myImage.shape("polska.gif")
+    myImage.shape("/home/artur/studia/algorithms-and-data-structures/lab8/polska.gif")
     myImage.penup()
     myImage.goto(0,0) 
     turtle.speed(0) 
