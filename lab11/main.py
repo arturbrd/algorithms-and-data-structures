@@ -168,20 +168,21 @@ def printGraph(g):
         print()
     print("-------------------") 
 
-def ullmann(used, M_mtrx, G_mtrx, P_mtrx, izomorphs, cur_row=0):
+def ullmann(used, M_mtrx, G_mtrx, P_mtrx, izomorphs, num_of_calls = 0, cur_row = 0):
+    num_of_calls += 1
     if cur_row == M_mtrx.size()[0]:
         if M_mtrx*transpose(M_mtrx*G_mtrx) == P_mtrx: 
            izomorphs.append(copy.deepcopy(M_mtrx))
-        return
+        return num_of_calls
     for c in range(M_mtrx.size()[1]):
         if not used[c]:
             used[c] = True
             for i in range(M_mtrx.size()[1]):
                 M_mtrx[cur_row][i] = 0
             M_mtrx[cur_row][c] = 1
-            ullmann(used, M_mtrx, G_mtrx, P_mtrx, izomorphs, cur_row+1)
+            num_of_calls = ullmann(used, M_mtrx, G_mtrx, P_mtrx, izomorphs, num_of_calls, cur_row+1)
             used[c] = False
-            
+    return num_of_calls
 
 def main():
     graph_G_tab = [ ('A','B',1), ('B','F',1), ('B','C',1), ('C','D',1), ('C','E',1), ('D','E',1)]
@@ -210,10 +211,11 @@ def main():
     G = Matrix(graph_G.mtrx)
 
     izomorphs = []
-    ullmann([False for _ in range(M.size()[1])], M, G, P, izomorphs)
+    num_of_calls = ullmann([False for _ in range(M.size()[1])], M, G, P, izomorphs)
 
     for el in izomorphs:
         print(el, "\n")
+    print("Liczba wywołań: ", num_of_calls)
 
 
 if __name__ == "__main__":
