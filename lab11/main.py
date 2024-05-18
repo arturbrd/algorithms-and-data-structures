@@ -184,6 +184,59 @@ def ullmann(used, M_mtrx, G_mtrx, P_mtrx, izomorphs, num_of_calls = 0, cur_row =
             used[c] = False
     return num_of_calls
 
+def ullmann2(used, M_mtrx, G_mtrx, P_mtrx, izomorphs, num_of_calls = 0, cur_row = 0):
+    num_of_calls += 1
+    if cur_row == M_mtrx.size()[0]:
+        if M_mtrx*transpose(M_mtrx*G_mtrx) == P_mtrx: 
+           izomorphs.append(copy.deepcopy(M_mtrx))
+        return num_of_calls
+    M_mtrx_copy = copy.deepcopy(M_mtrx)
+    for c in range(M_mtrx.size()[1]):
+        if not used[c] and M_mtrx[cur_row][c] != 0:
+            used[c] = True
+            for i in range(M_mtrx.size()[1]):
+                M_mtrx_copy[cur_row][i] = 0
+            M_mtrx_copy[cur_row][c] = 1
+            num_of_calls = ullmann(used, M_mtrx_copy, G_mtrx, P_mtrx, izomorphs, num_of_calls, cur_row+1)
+            used[c] = False
+    return num_of_calls
+
+def ullmann3(used, M_mtrx, G_mtrx, P_mtrx, izomorphs, num_of_calls = 0, cur_row = 0):
+    num_of_calls += 1
+    if cur_row == M_mtrx.size()[0]:
+        if M_mtrx*transpose(M_mtrx*G_mtrx) == P_mtrx: 
+           izomorphs.append(copy.deepcopy(M_mtrx))
+        return num_of_calls
+    M_mtrx_copy = copy.deepcopy(M_mtrx)
+    M_mtrx_copy = prune(M_mtrx_copy, P_mtrx, G_mtrx)
+    for c in range(M_mtrx.size()[1]):
+        if not used[c] and M_mtrx[cur_row][c] != 0:
+            used[c] = True
+            for i in range(M_mtrx.size()[1]):
+                M_mtrx_copy[cur_row][i] = 0
+            M_mtrx_copy[cur_row][c] = 1
+            num_of_calls = ullmann(used, M_mtrx_copy, G_mtrx, P_mtrx, izomorphs, num_of_calls, cur_row+1)
+            used[c] = False
+    return num_of_calls
+
+def prune(M, P, G):
+    while True:
+        old = copy.deepcopy(M)
+        for i in range(M.size()[0]):
+            for j in range(M.size()[1]):
+                if M[i][j] == 1:
+                    for x in range(len(P[i])):
+                        if P[i][x] == 0:
+                            continue
+                        for y in range(len(G[j])):
+                            if M[x][y] == 1:
+                                break
+                        else:
+                            M[i][j] = 0
+        if M == old:
+            break
+    return M
+
 def main():
     graph_G_tab = [ ('A','B',1), ('B','F',1), ('B','C',1), ('C','D',1), ('C','E',1), ('D','E',1)]
     graph_P_tab = [ ('A','B',1), ('B','C',1), ('A','C',1)]
