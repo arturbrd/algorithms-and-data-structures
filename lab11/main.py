@@ -259,16 +259,30 @@ def main():
         graph_P.insert_edge(v1, v2, e)
     printGraph(graph_P)
     mtrx = [[0 for _ in range(len(graph_G.mtrx))] for _ in range(len(graph_P.mtrx))]
-    M = Matrix(mtrx)
+    M = Matrix(copy.deepcopy(mtrx))
     P = Matrix(graph_P.mtrx)
     G = Matrix(graph_G.mtrx)
 
     izomorphs = []
     num_of_calls = ullmann([False for _ in range(M.size()[1])], M, G, P, izomorphs)
+    print(len(izomorphs), num_of_calls)
 
-    for el in izomorphs:
-        print(el, "\n")
-    print("Liczba wywołań: ", num_of_calls)
+    M0 = copy.deepcopy(mtrx)
+    for i in range(len(graph_P.mtrx)):
+        for j in range(len(graph_G.mtrx)):
+            if graph_G.mtrx[j].count(1) <= graph_P.mtrx[i].count(0):
+                M0[i][j] = 0
+            else:
+                M0[i][j] = 1
+    M0 = Matrix(M0)
+    M0_2 = copy.deepcopy(M0)
+    izomorphs = []
+    num_of_calls = ullmann2([False for _ in range(M.size()[1])], M0, G, P, izomorphs)
+    print(len(izomorphs), num_of_calls)
+
+    izomorphs = []
+    num_of_calls = ullmann3([False for _ in range(M.size()[1])], M0_2, G, P, izomorphs)
+    print(len(izomorphs), num_of_calls)
 
 
 if __name__ == "__main__":
