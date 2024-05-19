@@ -197,7 +197,7 @@ def ullmann2(used, M_mtrx, G_mtrx, P_mtrx, izomorphs, num_of_calls = 0, cur_row 
             for i in range(M_mtrx.size()[1]):
                 M_mtrx_copy[cur_row][i] = 0
             M_mtrx_copy[cur_row][c] = 1
-            num_of_calls = ullmann(used, M_mtrx_copy, G_mtrx, P_mtrx, izomorphs, num_of_calls, cur_row+1)
+            num_of_calls = ullmann2(used, M_mtrx_copy, G_mtrx, P_mtrx, izomorphs, num_of_calls, cur_row+1)
             used[c] = False
     return num_of_calls
 
@@ -215,7 +215,7 @@ def ullmann3(used, M_mtrx, G_mtrx, P_mtrx, izomorphs, num_of_calls = 0, cur_row 
             for i in range(M_mtrx.size()[1]):
                 M_mtrx_copy[cur_row][i] = 0
             M_mtrx_copy[cur_row][c] = 1
-            num_of_calls = ullmann(used, M_mtrx_copy, G_mtrx, P_mtrx, izomorphs, num_of_calls, cur_row+1)
+            num_of_calls = ullmann3(used, M_mtrx_copy, G_mtrx, P_mtrx, izomorphs, num_of_calls, cur_row+1)
             used[c] = False
     return num_of_calls
 
@@ -270,9 +270,7 @@ def main():
     M0 = copy.deepcopy(mtrx)
     for i in range(len(graph_P.mtrx)):
         for j in range(len(graph_G.mtrx)):
-            if graph_G.mtrx[j].count(1) <= graph_P.mtrx[i].count(0):
-                M0[i][j] = 0
-            else:
+            if graph_P.mtrx[i].count(1) <= graph_G.mtrx[j].count(1):
                 M0[i][j] = 1
     M0 = Matrix(M0)
     M0_2 = copy.deepcopy(M0)
