@@ -208,7 +208,7 @@ def ullmann3(used, M_mtrx, G_mtrx, P_mtrx, izomorphs, num_of_calls = 0, cur_row 
            izomorphs.append(copy.deepcopy(M_mtrx))
         return num_of_calls
     M_mtrx_copy = copy.deepcopy(M_mtrx)
-    M_mtrx_copy = prune(M_mtrx_copy, P_mtrx, G_mtrx)
+    prune(M_mtrx_copy, P_mtrx, G_mtrx)
     for c in range(M_mtrx.size()[1]):
         if not used[c] and M_mtrx[cur_row][c] != 0:
             used[c] = True
@@ -221,43 +221,40 @@ def ullmann3(used, M_mtrx, G_mtrx, P_mtrx, izomorphs, num_of_calls = 0, cur_row 
 
 def prune(M, P, G):
     while True:
-        old = copy.deepcopy(M)
+        changed = False
         for i in range(M.size()[0]):
             for j in range(M.size()[1]):
                 if M[i][j] == 1:
+                    to_break = False
                     for x in range(len(P[i])):
                         if P[i][x] == 0:
                             continue
                         for y in range(len(G[j])):
-                            if M[x][y] == 1:
+                            if G[j][y] == 1 and M[x][y] == 1:
+                                to_break = True
                                 break
-                        else:
-                            M[i][j] = 0
-        if M == old:
+                        if to_break:
+                            break
+                    else:
+                        M[i][j] = 0
+                        changed = True
+        if not changed:
             break
-    return M
 
 def main():
     graph_G_tab = [ ('A','B',1), ('B','F',1), ('B','C',1), ('C','D',1), ('C','E',1), ('D','E',1)]
     graph_P_tab = [ ('A','B',1), ('B','C',1), ('A','C',1)]
-
-    # graph_G_tab = [ ('A','B',1), ('B','C',1), ('A','C',1)]
-
-    # graph_P_tab = [ ('A', 'B', 1) , ('B', 'A', 1)]
-
 
     graph_G = MatrixGraph()
     for v1, v2, e in graph_G_tab:
         graph_G.insert_vertex(v1)
         graph_G.insert_vertex(v2)
         graph_G.insert_edge(v1, v2, e)
-    printGraph(graph_G)
     graph_P = MatrixGraph()
     for v1, v2, e in graph_P_tab:
         graph_P.insert_vertex(v1)
         graph_P.insert_vertex(v2)
         graph_P.insert_edge(v1, v2, e)
-    printGraph(graph_P)
     mtrx = [[0 for _ in range(len(graph_G.mtrx))] for _ in range(len(graph_P.mtrx))]
     M = Matrix(copy.deepcopy(mtrx))
     P = Matrix(graph_P.mtrx)
