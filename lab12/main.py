@@ -22,6 +22,7 @@ def RabinKarp(S, W):
     hW = hash(W)
     indexes = []
     comp = 0
+    col = 0
     for m in range(M-N+1):
         hS = hash(S[m:m+N])
         comp += 1
@@ -29,10 +30,11 @@ def RabinKarp(S, W):
             for i in range(N):
                 comp += 1
                 if S[m+i] != W[i]:
+                    col += 1
                     break
             else:
                 indexes.append(m)
-    return indexes, comp
+    return indexes, comp, col
 
 def RabinKarpRolling(S, W):
     M = len(S)
@@ -40,6 +42,7 @@ def RabinKarpRolling(S, W):
     hW = hash(W)
     indexes = []
     comp = 0
+    col = 0
     h = 1
     for i in range(N-1):  # N - jak wyżej - długość wzorca
         h = (h*256) % 101  
@@ -50,6 +53,7 @@ def RabinKarpRolling(S, W):
         for i in range(N):
             comp += 1
             if S[m+i] != W[i]:
+                col += 1
                 break
         else:
             indexes.append(m)
@@ -60,10 +64,11 @@ def RabinKarpRolling(S, W):
             for i in range(N):
                 comp += 1
                 if S[m+i] != W[i]:
+                    col += 1
                     break
             else:
                 indexes.append(m)
-    return indexes, comp
+    return indexes, comp, col
 
 def hash(word):
     hw = 0
@@ -91,21 +96,21 @@ def main():
 
     t_start = time.perf_counter()
 
-    indexes, comp = RabinKarp(S, W)
+    indexes, comp, col = RabinKarp(S, W)
 
     t_stop = time.perf_counter()
 
-    print(len(indexes), "; ", comp, sep="")
+    print(len(indexes), "; ", comp, "; ", col, sep="")
 
     print("Czas obliczeń:", "{:.7f}".format(t_stop - t_start))
 
     t_start = time.perf_counter()
 
-    indexes, comp = RabinKarpRolling(S, W)
+    indexes, comp, col = RabinKarpRolling(S, W)
 
     t_stop = time.perf_counter()
 
-    print(len(indexes), "; ", comp, sep="")
+    print(len(indexes), "; ", comp, "; ", col, sep="")
 
     print("Czas obliczeń:", "{:.7f}".format(t_stop - t_start))
 
